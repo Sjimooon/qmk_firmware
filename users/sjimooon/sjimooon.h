@@ -14,8 +14,9 @@ enum sjimooon_layers
 };
 
 enum td_keycodes {
-    TD_QUOTE,
+    TD_QUOTE = 0,
     TD_ALT_TAB,
+    TD_COUNT
 };
 
 enum custom_keycodes {
@@ -26,6 +27,8 @@ enum custom_keycodes {
     SI_SELECT_WORD,
     SI_TILDE
 };
+
+tap_dance_action_t tap_dance_actions[TD_COUNT];
 
 // Aliases for tap dance keycodes.
 #define TD_QUOT TD_QUOTE
