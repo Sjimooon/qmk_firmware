@@ -20,12 +20,29 @@ enum td_keycodes {
 };
 
 enum custom_keycodes {
-    SI_CIRCUMFLEX = SAFE_RANGE,
-    SI_DEGREE,
-    SI_GROVE,
-    SI_LEFT_SHIFT_ALT,
-    SI_SELECT_WORD,
-    SI_TILDE
+    // Symbols
+    S_CIRCUMFLEX = SAFE_RANGE,
+    S_DEGREE,
+    S_GROVE,
+    S_TILDE,
+    // Modifiers
+    S_LEFT_SHIFT_ALT,
+    // Advanced
+    S_SELECT_WORD,
+    // RGB Matrix
+    S_RGB_MATRIX_SAVE_EEPROM,
+    S_RGB_MATRIX_RELOAD_EEPROM,
+    S_RGB_MATRIX_TOGGLE,
+    S_RGB_MATRIX_ANIMATION_NEXT,
+    S_RGB_MATRIX_ANIMATION_PREVIOUS,
+    S_RGB_MATRIX_HUE_UP,
+    S_RGB_MATRIX_HUE_DOWN,
+    S_RGB_MATRIX_SATURATION_UP,
+    S_RGB_MATRIX_SATURATION_DOWN,
+    S_RGB_MATRIX_VALUE_UP,
+    S_RGB_MATRIX_VALUE_DOWN,
+    S_RGB_MATRIX_SPEED_UP,
+    S_RGB_MATRIX_SPEED_DOWN
 };
 
 tap_dance_action_t tap_dance_actions[TD_COUNT];
@@ -35,12 +52,29 @@ tap_dance_action_t tap_dance_actions[TD_COUNT];
 #define TD_ATAB TD_ALT_TAB
 
 // Aliases for custom keycodes.
-#define SI_CIRC SI_CIRCUMFLEX
-#define SI_DEG SI_DEGREE
-#define SI_GRV SI_GROVE
-#define SI_LSA SI_LEFT_SHIFT_ALT
-#define SI_SELW SI_SELECT_WORD
-#define SI_TILD SI_TILDE
+// Symbols
+#define SS_CIRC S_CIRCUMFLEX
+#define SS_DEG S_DEGREE
+#define SS_GRV S_GROVE
+#define SS_TILD S_TILDE
+// Modifiers
+#define SM_LSA S_LEFT_SHIFT_ALT
+// Advanced
+#define SA_SELW S_SELECT_WORD
+// RGB Matrix
+#define SR_SAVE S_RGB_MATRIX_SAVE_EEPROM
+#define SR_RELO S_RGB_MATRIX_RELOAD_EEPROM
+#define SR_TOGG S_RGB_MATRIX_TOGGLE
+#define SR_ANIN S_RGB_MATRIX_ANIMATION_NEXT
+#define SR_ANIP S_RGB_MATRIX_ANIMATION_PREVIOUS
+#define SR_HUEU S_RGB_MATRIX_HUE_UP
+#define SR_HUED S_RGB_MATRIX_HUE_DOWN
+#define SR_SATU S_RGB_MATRIX_SATURATION_UP
+#define SR_SATD S_RGB_MATRIX_SATURATION_DOWN
+#define SR_VALU S_RGB_MATRIX_VALUE_UP
+#define SR_VALD S_RGB_MATRIX_VALUE_DOWN
+#define SR_SPDU S_RGB_MATRIX_SPEED_UP
+#define SR_SPDD S_RGB_MATRIX_SPEED_DOWN
 
 /**
  * Execute custom keycodes.
