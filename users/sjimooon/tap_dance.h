@@ -10,8 +10,7 @@ typedef enum {
     TD_SINGLE_HOLD,
     TD_DOUBLE_TAP,
     TD_DOUBLE_HOLD,
-    //TD_TRIPLE_TAP,
-    //TD_TRIPLE_HOLD
+    TD_DOUBLE_SINGLE_TAP
 } td_state_t;
 
 // Context for storing state of a tap dance action.
@@ -23,37 +22,39 @@ typedef struct {
 typedef struct {
     uint16_t kc1;
     uint16_t kc2;
+    uint16_t kc3;
+    uint16_t kc4;
+    td_context_t context;
+} tap_dance_quad_t;
+
+typedef struct {
+    uint16_t kc1;
+    uint16_t kc2;
     uint8_t layer;
+    td_context_t context;
 } tap_dance_pair_layer_t;
 
-#define ACTION_TAP_DANCE_TAB_HOLD(kc1, kc2) \
-    { .fn = {NULL, td_tap_hold_finished_fn, td_tap_hold_reset_fn, td_tap_hold_release_fn}, .user_data = (void *)&((tap_dance_pair_t){kc1, kc2}) }
+// Tap once for 'kc1', hold to tap and then hold 'kc2', double tap for 'kc3', and tap and hold to tap and then hold 'kc4'.
+#define ACTION_TAP_DANCE_QUAD(kc1, kc2, kc3, kc4) \
+    { .fn = {NULL, td_quad_finished_fn, td_quad_reset_fn, NULL}, .user_data = (void *)&((tap_dance_quad_t){kc1, kc2, kc3, kc4}) }
 
+// Tap once for 'kc1' + 'kc2', hold for 'kc1' + 'kc2' then activate 'layer' momentarily with 'kc1' still held.
 #define ACTION_TAP_DANCE_MOD_TAP_LAYER(kc1, kc2, layer) \
     { .fn = {NULL, td_mod_tap_layer_finished_fn, td_mod_tap_layer_reset_fn, NULL}, .user_data = (void *)&((tap_dance_pair_layer_t){kc1, kc2, layer}) }
 
 /**
- * Determine the current tap dance state on key release.
+ * Get a tap dance context with current tap dance information.
  */
-void cur_dance_release(tap_dance_state_t *state, td_context_t *tap);
+td_context_t get_context(tap_dance_state_t *state);
 
 /**
- * Determine the current tap dance state when the tapping term duration has passed.
+ * Determine the current tap dance state.
  */
-void cur_dance_finished(tap_dance_state_t *state, td_context_t *tap);
+td_state_t cur_dance(tap_dance_state_t *state);
 
-// Tap dance action functions (calls logic funtions).
-void td_tap_hold_release_fn(tap_dance_state_t *state, void *user_data);
-void td_tap_hold_finished_fn(tap_dance_state_t *state, void *user_data);
-void td_tap_hold_reset_fn(tap_dance_state_t *state, void *user_data);
+// Tap dance functions (send keycodes based on tap dance state).
+void td_quad_finished_fn(tap_dance_state_t *state, void *user_data);
+void td_quad_reset_fn(tap_dance_state_t *state, void *user_data);
 
 void td_mod_tap_layer_finished_fn(tap_dance_state_t *state, void *user_data);
 void td_mod_tap_layer_reset_fn(tap_dance_state_t *state, void *user_data);
-
-// Tap dance logic functions (sends keycodes based on tap dance state).
-void td_tap_hold_release(tap_dance_state_t *state, uint16_t tap_keycode, uint16_t hold_keycode);
-void td_tap_hold_finished(tap_dance_state_t *state, uint16_t tap_keycode, uint16_t hold_keycode);
-void td_tap_hold_reset(tap_dance_state_t *state, uint16_t tap_keycode, uint16_t hold_keycode);
-
-void td_mod_tap_layer_finished(tap_dance_state_t *state, uint16_t modifier_keycode, uint16_t tap_keycode, uint8_t layer);
-void td_mod_tap_layer_reset(tap_dance_state_t *state, uint16_t modifier_keycode, uint16_t tap_keycode, uint8_t layer);

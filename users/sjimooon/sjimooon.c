@@ -4,9 +4,9 @@
 #include "sendstring_danish.h"
 
 tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for ', twice for "
-    [TD_QUOT] = ACTION_TAP_DANCE_DOUBLE(DK_QUOT, DK_DQUO),
-    // Tab once for Alt + Tab, hold for Alt + Tab then activate layer momentarily with Alt held
+    // Tap once for ' and hold or double tap for ".
+    [TD_QUOT] = ACTION_TAP_DANCE_QUAD(DK_QUOT, DK_DQUO, DK_DQUO, KC_NO),
+    // Tab once for Alt + Tab, hold for Alt + Tab then activate layer momentarily with Alt still held.
     [TD_ATAB] = ACTION_TAP_DANCE_MOD_TAP_LAYER(KC_LALT, KC_TAB, L_NAV)
 };
 
