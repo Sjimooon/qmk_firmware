@@ -93,6 +93,18 @@ void td_mod_tap_layer_reset_fn(tap_dance_state_t *state, void *user_data) {
 }
 
 // Quad
+void td_quad_on_each_tap_fn(tap_dance_state_t *state, void *user_data) {
+    tap_dance_quad_t *data = (tap_dance_quad_t *)user_data;
+    // If the tap dance key is tapped repeatedly (3 or more times), keep sending taps of the single tap keycode.
+    if (state->count > 2) {
+        if (state->count == 3) {
+            tap_code(data->kc1);
+            tap_code(data->kc1);
+        }
+        tap_code(data->kc1);
+    }
+}
+
 void td_quad_finished_fn(tap_dance_state_t *state, void *user_data) {
     tap_dance_quad_t *data = (tap_dance_quad_t *)user_data;
     data->context = get_context(state);
