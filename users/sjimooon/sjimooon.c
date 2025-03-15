@@ -10,6 +10,10 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_ATAB] = ACTION_TAP_DANCE_MOD_TAP_LAYER(KC_LALT, KC_TAB, L_NAV)
 };
 
+void sjimooon_keyboard_pre_init_user(void) {
+    initialize_tap_dance();
+}
+
 bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Tip: In VS Code, hit 'Ctrl + K' 'Ctrl + 3' to fold cases and 'Ctrl + K' + 'Ctrl + J' to unfold all.
     switch (keycode) {

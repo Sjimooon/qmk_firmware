@@ -77,6 +77,11 @@ tap_dance_action_t tap_dance_actions[TD_COUNT];
 #define SR_SPDD S_RGB_MATRIX_SPEED_DOWN
 
 /**
+ * Run initializing code.
+ */
+void sjimooon_keyboard_pre_init_user(void);
+
+/**
  * Execute custom keycodes.
  */
 bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record);
