@@ -42,6 +42,14 @@ typedef struct {
 #define ACTION_TAP_DANCE_MOD_TAP_LAYER(kc1, kc2, layer) \
     { .fn = {NULL, td_mod_tap_layer_finished_fn, td_mod_tap_layer_reset_fn, NULL}, .user_data = (void *)&((tap_dance_pair_layer_t){kc1, kc2, layer}) }
 
+// Tap dance functions (send keycodes based on tap dance state).
+void td_quad_on_each_tap_fn(tap_dance_state_t *state, void *user_data);
+void td_quad_finished_fn(tap_dance_state_t *state, void *user_data);
+void td_quad_reset_fn(tap_dance_state_t *state, void *user_data);
+
+void td_mod_tap_layer_finished_fn(tap_dance_state_t *state, void *user_data);
+void td_mod_tap_layer_reset_fn(tap_dance_state_t *state, void *user_data);
+
 /**
  * Perform initial setup. Must be called before using any tap dances.
  */
@@ -53,14 +61,11 @@ void initialize_tap_dance(void);
 td_context_t *get_context(tap_dance_state_t *state);
 
 /**
+ * Reset a tap dance context.
+ */
+void recycle_context(td_context_t *context);
+
+/**
  * Determine the current tap dance state.
  */
 td_state_t cur_dance(tap_dance_state_t *state);
-
-// Tap dance functions (send keycodes based on tap dance state).
-void td_quad_on_each_tap_fn(tap_dance_state_t *state, void *user_data);
-void td_quad_finished_fn(tap_dance_state_t *state, void *user_data);
-void td_quad_reset_fn(tap_dance_state_t *state, void *user_data);
-
-void td_mod_tap_layer_finished_fn(tap_dance_state_t *state, void *user_data);
-void td_mod_tap_layer_reset_fn(tap_dance_state_t *state, void *user_data);

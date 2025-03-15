@@ -5,7 +5,6 @@
 typedef struct {
     td_context_t pool[TD_CONTEXT_POOL_SIZE];
     td_context_t *next;
-    int ignoreCount;
 } td_context_pool_t;
 
 // Global pool of reuseable tap dance contexts.
@@ -19,7 +18,6 @@ void initialize_tap_dance(void) {
         td_context_pool.pool[i].state = TD_NONE;
     }
     td_context_pool.next = td_context_pool.pool;
-    td_context_pool.ignoreCount = 0;
 }
 
 td_context_t *get_context(tap_dance_state_t *state) {
@@ -151,6 +149,5 @@ void td_quad_reset_fn(tap_dance_state_t *state, void *user_data) {
         default:
             break;
     }
-    tap_code(KC_1);
     recycle_context(data->context);
 }
