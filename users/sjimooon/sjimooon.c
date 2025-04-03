@@ -3,18 +3,34 @@
 #include "send_string.h"
 #include "sendstring_danish.h"
 
+// Default keypress information.
+static keyrecord_t default_keyrecord = {
+    .event = {
+        .key = {
+            .col = 0,
+            .row = 0
+        },
+        .pressed = true,
+        .time = 0
+    }
+};
+
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for ' and hold or double tap for ".
-    [TD_QUOT] = ACTION_TAP_DANCE_QUAD(DK_QUOT, DK_DQUO, DK_DQUO, KC_NO),
+    [TD_QUOT] = ACTION_TAP_DANCE_QUAD_TAP(DK_QUOT, DK_DQUO, DK_DQUO, S_TILDE),
     // Tab once for Alt + Tab, hold for Alt + Tab then activate layer momentarily with Alt still held.
     [TD_ATAB] = ACTION_TAP_DANCE_MOD_TAP_LAYER(KC_LALT, KC_TAB, L_NAV)
 };
 
-void sjimooon_keyboard_pre_init_user(void) {
+void keyboard_pre_init_sjimooon(void) {
     initialize_tap_dance();
 }
 
-bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_keycode_sjimooon(uint16_t keycode) {
+    return process_record_sjimooon(keycode, &default_keyrecord);
+}
+
+bool process_record_sjimooon(uint16_t keycode, keyrecord_t *record) {
     // Tip: In VS Code, hit 'Ctrl + K' 'Ctrl + 3' to fold cases and 'Ctrl + K' + 'Ctrl + J' to unfold all.
     switch (keycode) {
         // Symbols
@@ -23,7 +39,7 @@ bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 SEND_STRING(SS_LSFT(SS_TAP(X_RBRC)) " ");
             }
-            break;
+            return false;
         case S_DEGREE:
             // ° (Alt + 0176)
             if (record->event.pressed) {
@@ -34,19 +50,19 @@ bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_P6);
                 unregister_code(KC_LALT);
             }
-            break;
+            return false;
         case S_GROVE:
             // `
             if (record->event.pressed) {
                 SEND_STRING(SS_LSFT(SS_TAP(X_EQL)) " ");
             }
-            break;
+            return false;
         case S_TILDE:
             // ~
             if (record->event.pressed) {
                 SEND_STRING(SS_RALT(SS_TAP(X_RBRC)) " ");
             }
-            break;
+            return false;
         // Modifiers
         case S_LEFT_SHIFT_ALT:
             // Left Shift and Left Alt
@@ -58,7 +74,7 @@ bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LALT);
                 unregister_code(KC_LSFT);
             }
-            break;
+            return false;
         // Functions
         case S_SELECT_WORD:
             // Select Word
@@ -70,7 +86,7 @@ bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LSFT);
                 unregister_code(KC_LCTL);
             }
-            break;
+            return false;
         // RGB Matrix
         case S_RGB_MATRIX_SAVE_EEPROM:
             // Save RGB Matrix configuration to EEPROM.
@@ -85,79 +101,79 @@ bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record) {
                 rgb_matrix_sethsv(rgb_matrix_get_hue(), rgb_matrix_get_sat(), rgb_matrix_get_val());
                 rgb_matrix_set_speed(rgb_matrix_get_speed());
             }
-            break;
+            return false;
         case S_RGB_MATRIX_RELOAD_EEPROM:
             // Reset RGB Matrix to configuration saved in EEPROM.
             if (record->event.pressed) {
                 rgb_matrix_reload_from_eeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_TOGGLE:
             // Toggle RGB matrix on or off.
             if (record->event.pressed) {
                 rgb_matrix_toggle_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_ANIMATION_NEXT:
             // Next animation.
             if (record->event.pressed) {
                 rgb_matrix_step_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_ANIMATION_PREVIOUS:
             // Previous animation.
             if (record->event.pressed) {
                 rgb_matrix_step_reverse_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_HUE_UP:
             // Color hue up.
             if (record->event.pressed) {
                 rgb_matrix_increase_hue_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_HUE_DOWN:
             // Color hue down.
             if (record->event.pressed) {
                 rgb_matrix_decrease_hue_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_SATURATION_UP:
             // Color saturation up.
             if (record->event.pressed) {
                 rgb_matrix_increase_sat_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_SATURATION_DOWN:
             // Color saturation down.
             if (record->event.pressed) {
                 rgb_matrix_decrease_sat_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_VALUE_UP:
             // Color value (brightness) up.
             if (record->event.pressed) {
                 rgb_matrix_increase_val_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_VALUE_DOWN:
             // Color value (brightness) down.
             if (record->event.pressed) {
                 rgb_matrix_decrease_val_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_SPEED_UP:
             // Animation speed up.
             if (record->event.pressed) {
                 rgb_matrix_increase_speed_noeeprom();
             }
-            break;
+            return false;
         case S_RGB_MATRIX_SPEED_DOWN:
             // Animation speed down.
             if (record->event.pressed) {
                 rgb_matrix_decrease_speed_noeeprom();
             }
-            break;
+            return false;
         default:
             break;
     }

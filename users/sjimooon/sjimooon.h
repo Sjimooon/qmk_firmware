@@ -79,9 +79,18 @@ tap_dance_action_t tap_dance_actions[TD_COUNT];
 /**
  * Run initializing code.
  */
-void sjimooon_keyboard_pre_init_user(void);
+void keyboard_pre_init_sjimooon(void);
 
 /**
- * Execute custom keycodes.
+ * Execute custom keycodes (w. limited keypress information)
+ *
+ * @return `false` if no further processing should happen for this key.
  */
-bool sjimooon_process_record_user(uint16_t keycode, keyrecord_t *record);
+bool process_keycode_sjimooon(uint16_t keycode);
+
+/**
+ * Execute custom keycodes (w. full keypress information).
+ *
+ * @return `false` if no further processing should happen for this key.
+ */
+bool process_record_sjimooon(uint16_t keycode, keyrecord_t *record);

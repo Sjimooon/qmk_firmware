@@ -1,4 +1,5 @@
 #include "tap_dance.h"
+#include "sjimooon.h"
 
 #define TD_CONTEXT_POOL_SIZE 10
 
@@ -55,55 +56,20 @@ td_state_t cur_dance(tap_dance_state_t *state) {
     }
 }
 
-// Mod Tap Layer
-void td_mod_tap_layer_finished_fn(tap_dance_state_t *state, void *user_data) {
-    tap_dance_pair_layer_t *data = (tap_dance_pair_layer_t *)user_data;
-    data->context = get_context(state);
-    switch (data->context->state) {
-        case TD_SINGLE_TAP:
-            register_code(data->kc1);
-            tap_code(data->kc2);
-            break;
-        case TD_SINGLE_HOLD:
-            register_code(data->kc1);
-            tap_code(data->kc2);
-            layer_on(data->layer);
-            break;
-        default:
-            break;
-    }
-}
-
-void td_mod_tap_layer_reset_fn(tap_dance_state_t *state, void *user_data) {
-    tap_dance_pair_layer_t *data = (tap_dance_pair_layer_t *)user_data;
-    switch (data->context->state) {
-        case TD_SINGLE_TAP:
-            unregister_code(data->kc1);
-            break;
-        case TD_SINGLE_HOLD:
-            layer_off(data->layer);
-            unregister_code(data->kc1);
-            break;
-        default:
-            break;
-    }
-    recycle_context(data->context);
-}
-
 // Quad
-void td_quad_on_each_tap_fn(tap_dance_state_t *state, void *user_data) {
+void td_quad_on_each_tap(tap_dance_state_t *state, void *user_data) {
     tap_dance_quad_t *data = (tap_dance_quad_t *)user_data;
     // If the tap dance key is tapped repeatedly (3 or more times), keep sending taps of the single tap keycode.
     if (state->count > 2) {
         if (state->count == 3) {
-            tap_code(data->kc1);
-            tap_code(data->kc1);
+            tap_code16(data->kc1);
+            tap_code16(data->kc1);
         }
-        tap_code(data->kc1);
+        tap_code16(data->kc1);
     }
 }
 
-void td_quad_finished_fn(tap_dance_state_t *state, void *user_data) {
+void td_quad_finished(tap_dance_state_t *state, void *user_data) {
     tap_dance_quad_t *data = (tap_dance_quad_t *)user_data;
     data->context = get_context(state);
     switch (data->context->state ) {
@@ -128,7 +94,7 @@ void td_quad_finished_fn(tap_dance_state_t *state, void *user_data) {
     }
 }
 
-void td_quad_reset_fn(tap_dance_state_t *state, void *user_data) {
+void td_quad_reset(tap_dance_state_t *state, void *user_data) {
     tap_dance_quad_t *data = (tap_dance_quad_t *)user_data;
     switch (data->context->state) {
         case TD_SINGLE_TAP:
@@ -145,6 +111,87 @@ void td_quad_reset_fn(tap_dance_state_t *state, void *user_data) {
             break;
         case TD_DOUBLE_SINGLE_TAP:
             unregister_code16(data->kc1);
+            break;
+        default:
+            break;
+    }
+    recycle_context(data->context);
+}
+
+// Quad Tap
+void td_quad_on_each_tap(tap_dance_state_t *state, void *user_data) {
+    tap_dance_quad_t *data = (tap_dance_quad_t *)user_data;
+    // If the tap dance key is tapped repeatedly (3 or more times), keep sending taps of the single tap keycode.
+    if (state->count > 2) {
+        if (state->count == 3) {
+            if (process_keycode_sjimooon(data->kc1))
+                tap_code16(data->kc1);
+            if (process_keycode_sjimooon(data->kc1))
+                tap_code16(data->kc1);
+        }
+        if (process_keycode_sjimooon(data->kc1))
+            tap_code16(data->kc1);
+    }
+}
+
+void td_quad_tap_finished(tap_dance_state_t *state, void *user_data) {
+    tap_dance_quad_t *data = (tap_dance_quad_t *)user_data;
+    data->context = get_context(state);
+    switch (data->context->state ) {
+        case TD_SINGLE_TAP:
+            if (process_keycode_sjimooon(data->kc1))
+                tap_code16(data->kc1);
+            break;
+        case TD_SINGLE_HOLD:
+            if (process_keycode_sjimooon(data->kc2))
+                tap_code16(data->kc2);
+            break;
+        case TD_DOUBLE_TAP:
+            if (process_keycode_sjimooon(data->kc3))
+                tap_code16(data->kc3);
+            break;
+        case TD_DOUBLE_HOLD:
+            if (process_keycode_sjimooon(data->kc4))
+                tap_code16(data->kc4);
+            break;
+        case TD_DOUBLE_SINGLE_TAP:
+            if (process_keycode_sjimooon(data->kc3))
+                tap_code16(data->kc3);
+            break;
+        default:
+            break;
+    }
+    recycle_context(data->context);
+}
+
+// Mod Tap Layer
+void td_mod_tap_layer_finished(tap_dance_state_t *state, void *user_data) {
+    tap_dance_pair_layer_t *data = (tap_dance_pair_layer_t *)user_data;
+    data->context = get_context(state);
+    switch (data->context->state) {
+        case TD_SINGLE_TAP:
+            register_code(data->kc1);
+            tap_code(data->kc2);
+            break;
+        case TD_SINGLE_HOLD:
+            register_code(data->kc1);
+            tap_code(data->kc2);
+            layer_on(data->layer);
+            break;
+        default:
+            break;
+    }
+}
+
+void td_mod_tap_layer_reset(tap_dance_state_t *state, void *user_data) {
+    tap_dance_pair_layer_t *data = (tap_dance_pair_layer_t *)user_data;
+    switch (data->context->state) {
+        case TD_SINGLE_TAP:
+            unregister_code(data->kc1);
+            break;
+        case TD_SINGLE_HOLD:
+            layer_off(data->layer);
+            unregister_code(data->kc1);
             break;
         default:
             break;

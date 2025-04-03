@@ -49,9 +49,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void keyboard_pre_init_user(void) {
-    sjimooon_keyboard_pre_init_user();
+    keyboard_pre_init_sjimooon();
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    return sjimooon_process_record_user(keycode, record);
+    return process_record_sjimooon(keycode, record);
 }
