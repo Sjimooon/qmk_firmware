@@ -82,15 +82,32 @@ tap_dance_action_t tap_dance_actions[TD_COUNT];
 void keyboard_pre_init_sjimooon(void);
 
 /**
- * Execute custom keycodes (w. limited keypress information)
- *
- * @return `false` if no further processing should happen for this key.
- */
-bool process_keycode_sjimooon(uint16_t keycode);
-
-/**
- * Execute custom keycodes (w. full keypress information).
+ * Execute custom keycodes.
  *
  * @return `false` if no further processing should happen for this key.
  */
 bool process_record_sjimooon(uint16_t keycode, keyrecord_t *record);
+
+/**
+ * Like `register_code16()` but with support for custom keycodes.
+ * Will call the default function if `code` isn't a custom keycode.
+ */
+void register_code16_sjimooon(uint16_t code);
+
+/**
+ * Like `unregister_code16()` but with support for custom keycodes.
+ * Will call the default function if `code` isn't a custom keycode.
+ */
+void unregister_code16_sjimooon(uint16_t code);
+
+/**
+ * Like `register_code16()` but with support for custom keycodes.
+ * Will call the default function if `code` isn't a custom keycode.
+ */
+void tap_code16_sjimooon(uint16_t code);
+
+/**
+ * Like `register_code16_delay()` but with support for custom keycodes.
+ * Will call the default function if `code` isn't a custom keycode.
+ */
+void tap_code16_delay_sjimooon(uint16_t code, uint16_t delay);

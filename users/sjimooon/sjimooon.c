@@ -4,7 +4,7 @@
 #include "sendstring_danish.h"
 
 // Default keypress information.
-static keyrecord_t default_keyrecord = {
+static keyrecord_t default_keyrecord_press = {
     .event = {
         .key = {
             .col = 0,
@@ -15,6 +15,22 @@ static keyrecord_t default_keyrecord = {
     }
 };
 
+static keyrecord_t default_keyrecord_release = {
+    .event = {
+        .key = {
+            .col = 0,
+            .row = 0
+        },
+        .pressed = false,
+        .time = 0
+    }
+};
+
+/**
+ * Unregister a registered keycode. Support for custom keycodes.
+ */
+static void release_code16_sjimooon(uint16_t code, uint16_t delay);
+
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for ' and hold or double tap for ".
     [TD_QUOT] = ACTION_TAP_DANCE_QUAD_TAP(DK_QUOT, DK_DQUO, DK_DQUO, S_TILDE),
@@ -24,10 +40,6 @@ tap_dance_action_t tap_dance_actions[] = {
 
 void keyboard_pre_init_sjimooon(void) {
     initialize_tap_dance();
-}
-
-bool process_keycode_sjimooon(uint16_t keycode) {
-    return process_record_sjimooon(keycode, &default_keyrecord);
 }
 
 bool process_record_sjimooon(uint16_t keycode, keyrecord_t *record) {
@@ -75,7 +87,7 @@ bool process_record_sjimooon(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LSFT);
             }
             return false;
-        // Functions
+        // Advanced
         case S_SELECT_WORD:
             // Select Word
             if (record->event.pressed) {
@@ -179,4 +191,45 @@ bool process_record_sjimooon(uint16_t keycode, keyrecord_t *record) {
     }
 
     return true;
+}
+
+// Custom keycode register, unregister, and tap functions.
+void register_code16_sjimooon(uint16_t code) {
+    if (process_record_sjimooon(code, &default_keyrecord_press))
+        register_code16(code);
+}
+
+void unregister_code16_sjimooon(uint16_t code) {
+    if (process_record_sjimooon(code, &default_keyrecord_release))
+        unregister_code16(code);
+}
+
+void tap_code16_sjimooon(uint16_t code) {
+    if (process_record_sjimooon(code, &default_keyrecord_press)) {
+        tap_code16(code);
+
+        return;
+    }
+
+    // Release the pressed custom keycode after the same delay that `tap_code16()` use internally.
+    release_code16_sjimooon(code, code == KC_CAPS_LOCK ? TAP_HOLD_CAPS_DELAY : TAP_CODE_DELAY);
+}
+
+void tap_code16_delay_sjimooon(uint16_t code, uint16_t delay) {
+    if (process_record_sjimooon(code, &default_keyrecord_press)) {
+        tap_code16_delay(code, delay);
+
+        return;
+    }
+
+    // Release the pressed custom keycode after the delay.
+    release_code16_sjimooon(code, delay);
+}
+
+void release_code16_sjimooon(uint16_t code, uint16_t delay) {
+    for (uint16_t i = delay; i > 0; i--) {
+        wait_ms(1);
+    }
+
+    process_record_sjimooon(code, &default_keyrecord_release);
 }
