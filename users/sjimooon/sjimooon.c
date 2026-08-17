@@ -32,10 +32,13 @@ static keyrecord_t default_keyrecord_release = {
 static void release_code16_sjimooon(uint16_t code, uint16_t delay);
 
 tap_dance_action_t tap_dance_actions[] = {
+    // Tab once for Alt + Tab, hold for Alt + Tab then activate layer momentarily with Alt still held.
+    [TD_ATAB] = ACTION_TAP_DANCE_MOD_TAP_LAYER(KC_LALT, KC_TAB, L_NAV),
+    // Tab once for Esc, hold for
+    [TD_ESC] = ACTION_TAP_DANCE_QUAD_TAP(KC_ESC, S(KC_ESC), KC_NO, KC_NO),
     // Tap once for ' and hold or double tap for ".
     [TD_QUOT] = ACTION_TAP_DANCE_QUAD_TAP(DK_QUOT, DK_DQUO, DK_DQUO, S_TILDE),
-    // Tab once for Alt + Tab, hold for Alt + Tab then activate layer momentarily with Alt still held.
-    [TD_ATAB] = ACTION_TAP_DANCE_MOD_TAP_LAYER(KC_LALT, KC_TAB, L_NAV)
+    //[TD_PRRE] = ACTION_TAP_DANCE_QUAD(SA_PRRE, SA_PRRE, SA_PRRE, SA_PRRE)
 };
 
 void keyboard_pre_init_sjimooon(void) {
@@ -97,6 +100,13 @@ bool process_record_sjimooon(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_RGHT);
                 unregister_code(KC_LSFT);
                 unregister_code(KC_LCTL);
+            }
+            return false;
+        case S_PRESS_RELEASE:
+            if (record->event.pressed) {
+                SEND_STRING("PRESS ");
+            } else {
+                SEND_STRING("RELEASE ");
             }
             return false;
         // RGB Matrix

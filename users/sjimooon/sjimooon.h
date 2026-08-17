@@ -14,8 +14,10 @@ enum sjimooon_layers
 };
 
 enum td_keycodes {
-    TD_QUOTE = 0,
-    TD_ALT_TAB,
+    TD_ALT_TAB = 0,
+    TD_ESC,
+    TD_QUOTE,
+    TD_PRRE,
     TD_COUNT
 };
 
@@ -29,6 +31,7 @@ enum custom_keycodes {
     S_LEFT_SHIFT_ALT,
     // Advanced
     S_SELECT_WORD,
+    S_PRESS_RELEASE,
     // RGB Matrix
     S_RGB_MATRIX_SAVE_EEPROM,
     S_RGB_MATRIX_RELOAD_EEPROM,
@@ -61,6 +64,7 @@ tap_dance_action_t tap_dance_actions[TD_COUNT];
 #define SM_LSA S_LEFT_SHIFT_ALT
 // Advanced
 #define SA_SELW S_SELECT_WORD
+#define SA_PRRE S_PRESS_RELEASE
 // RGB Matrix
 #define SR_SAVE S_RGB_MATRIX_SAVE_EEPROM
 #define SR_RELO S_RGB_MATRIX_RELOAD_EEPROM
